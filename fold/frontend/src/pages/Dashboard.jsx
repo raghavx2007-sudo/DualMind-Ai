@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   const fetchAIStats = async () => {
     try {
-      const response = await api.post("/analyze", {
+      const response = await api.post("/api/analyze", {
         text: "I have many assignments due tomorrow and exams coming."
       });
 

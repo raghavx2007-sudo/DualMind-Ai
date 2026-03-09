@@ -107,7 +107,7 @@ export default function PersonalAI() {
 
     try {
 
-      const response = await api.post("/chat", {
+      const response = await api.post("/api/chat", {
         text: userText,
       });
 
