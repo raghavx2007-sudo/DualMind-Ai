@@ -13,7 +13,7 @@ export default function TodayTasks({ onTasksUpdate }) {
 
       setLoading(true);
 
-      const res = await api.get("/tasks");
+      const res = await api.get("/api/tasks");
 
       const loadedTasks = res.data || [];
 
@@ -43,7 +43,7 @@ export default function TodayTasks({ onTasksUpdate }) {
 
     try {
 
-      const res = await api.post("/tasks", {
+      const res = await api.post("/api/tasks", {
         title: input
       });
 
@@ -67,7 +67,7 @@ export default function TodayTasks({ onTasksUpdate }) {
 
     try {
 
-      const res = await api.put(`/tasks/${id}`);
+      const res = await api.put(`/api/tasks/${id}`);
 
       const updated = tasks.map(task =>
         task._id === id ? res.data : task
@@ -103,7 +103,7 @@ export default function TodayTasks({ onTasksUpdate }) {
     // 🔔 notify other components immediately
     window.dispatchEvent(new Event("tasksRebalanced"));
 
-    await api.delete("/tasks/clear");
+    await api.delete("/api/tasks/clear");
 
     setTasks([]);
 
