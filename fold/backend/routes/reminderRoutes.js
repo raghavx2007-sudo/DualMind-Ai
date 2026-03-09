@@ -35,22 +35,12 @@ router.post("/add", auth, async (req, res) => {
 
 // GET REMINDERS
 router.get("/", auth, async (req, res) => {
-
   try {
-
-    const reminders = await Reminder
-      .find({ user: req.user.id })
-      .sort({ dateTime: 1 });
-
+    const reminders = await Reminder.find().sort({ dateTime: 1 });
     res.json(reminders);
-
   } catch (err) {
-
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch reminders" });
-
+    res.status(500).json(err);
   }
-
 });
 
 
