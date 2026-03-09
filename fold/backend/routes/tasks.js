@@ -6,25 +6,22 @@ const auth = require("../middleware/authMiddleware");
 
 /* DELETE TASK */
 
-router.delete("/tasks/:id", auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
 
   try {
 
-    const deleted = await Task.findOneAndDelete({
-      _id: req.params.id,
-      user: req.user.id
-    });
+    const deleted = await Task.findByIdAndDelete(req.params.id);
 
-    res.json({
-      message: "Task deleted",
-      deleted
-    });
+    if (!deleted) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.json({ message: "Task deleted" });
 
   } catch (err) {
 
-    res.status(500).json({
-      error: "Delete failed"
-    });
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete task" });
 
   }
 
