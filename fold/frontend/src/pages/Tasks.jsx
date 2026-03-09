@@ -82,7 +82,7 @@ const deleteTask = async (id) => {
 
   try {
 
-    await api.delete(`/tasks/${id}`);
+    await api.delete(`/api/tasks/${id}`);
 
     setTasks((prev) => prev.filter((t) => t._id !== id));
 
