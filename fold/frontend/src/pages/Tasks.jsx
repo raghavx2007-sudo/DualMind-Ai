@@ -19,7 +19,7 @@ export default function Tasks() {
 
   const fetchTasks = async () => {
     try {
-      const res = await api.get("https://dualmind-ai-xubm.onrender.com/api/tasks");
+      const res = await api.get("/tasks");
       setTasks(res.data);
     } catch (err) {
       console.error("Failed to load tasks:", err);
@@ -37,7 +37,7 @@ export default function Tasks() {
     try {
 
       const res = await api.post(
-        "https://dualmind-ai-xubm.onrender.com/api/tasks",
+        "/tasks",
         { title: task }
       );
 
@@ -59,7 +59,7 @@ export default function Tasks() {
     try {
 
       const res = await api.put(
-        `https://dualmind-ai-xubm.onrender.com/api/tasks/${id}`
+        `/tasks/${id}`
       );
 
       setTasks(tasks.map((t) =>
@@ -82,7 +82,7 @@ const deleteTask = async (id) => {
 
   try {
 
-    await api.delete(`/api/tasks/${id}`);
+    await api.delete(`/tasks/${id}`);
 
     setTasks((prev) => prev.filter((t) => t._id !== id));
 
