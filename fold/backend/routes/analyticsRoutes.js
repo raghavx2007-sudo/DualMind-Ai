@@ -1,5 +1,6 @@
 const express = require("express");
 const Task = require("../models/Task");
+const auth = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -7,11 +8,10 @@ const router = express.Router();
    BRI SCORE
 ========================= */
 
-router.get("/bri", async (req, res) => {
-
+router.get("/bri", auth, async (req, res) => {
   try {
 
-    const tasks = await Task.find();
+    const tasks = await Task.find({ user: req.user.id });
 
     const completed = tasks.filter(t => t.completed).length;
     const total = tasks.length || 1;
@@ -28,18 +28,18 @@ router.get("/bri", async (req, res) => {
     res.status(500).json({ error: "BRI calculation failed" });
 
   }
-
 });
+
 
 /* =========================
    DISCIPLINE SCORE
 ========================= */
 
-router.get("/discipline", async (req, res) => {
+router.get("/discipline", auth, async (req, res) => {
 
   try {
 
-    const tasks = await Task.find();
+    const tasks = await Task.find({ user: req.user.id });
 
     const completed = tasks.filter(t => t.completed).length;
     const total = tasks.length || 1;

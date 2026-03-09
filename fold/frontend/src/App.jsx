@@ -1,34 +1,100 @@
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import PersonalAI from "./pages/PersonalAI";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+
 import Dashboard from "./pages/Dashboard";
+import PersonalAI from "./pages/PersonalAI";
 import Learning from "./pages/Learning";
 import Tasks from "./pages/Tasks";
 import Reminders from "./pages/Reminders";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+}
+
 function App() {
-  const location = useLocation();
-
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/learning" element={<Learning />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/reminders" element={<Reminders />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/ai" element={<PersonalAI />} />
+    <Routes>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" />} />
+      {/* PUBLIC ROUTES */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
-      </Routes>
-    </AnimatePresence>
+      {/* PROTECTED ROUTES */}
+
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/ai"
+        element={
+          <ProtectedRoute>
+            <PersonalAI />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/learning"
+        element={
+          <ProtectedRoute>
+            <Learning />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/tasks"
+        element={
+          <ProtectedRoute>
+            <Tasks />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/reminders"
+        element={
+          <ProtectedRoute>
+            <Reminders />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <Analytics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+    </Routes>
   );
 }
 
