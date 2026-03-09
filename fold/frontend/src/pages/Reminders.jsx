@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Layout from "../components/layout/Layout";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function Reminders() {
   const [reminder, setReminder] = useState("");
@@ -19,7 +19,7 @@ export default function Reminders() {
 
   const fetchReminders = async () => {
     try {
-      const res = await axios.get("https://dualmind-ai-xubm.onrender.com/api/reminders");
+      const res = await api.get("https://dualmind-ai-xubm.onrender.com/api/reminders");
       setList(res.data);
     } catch (err) {
       console.error("Error loading reminders:", err);
@@ -34,7 +34,7 @@ export default function Reminders() {
     if (!reminder || !time || !date) return;
 
     try {
-      const res = await axios.post("https://dualmind-ai-xubm.onrender.com/api/reminders/add", {
+      const res = await api.post("https://dualmind-ai-xubm.onrender.com/api/reminders/add", {
         text: reminder,
         time: time,
         date: date,
@@ -55,7 +55,7 @@ export default function Reminders() {
 
   const deleteReminder = async (id) => {
     try {
-      await axios.delete(`https://dualmind-ai-xubm.onrender.com/api/reminders/${id}`);
+      await api.delete(`https://dualmind-ai-xubm.onrender.com/api/reminders/${id}`);
       setList(list.filter((item) => item._id !== id));
     } catch (err) {
       console.error("Error deleting reminder:", err);

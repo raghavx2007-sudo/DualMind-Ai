@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaPlus, FaCheck, FaTrash } from "react-icons/fa";
 import Layout from "../components/layout/Layout";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function Tasks() {
 
@@ -19,7 +19,7 @@ export default function Tasks() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("https://dualmind-ai-xubm.onrender.com/api/tasks");
+      const res = await api.get("https://dualmind-ai-xubm.onrender.com/api/tasks");
       setTasks(res.data);
     } catch (err) {
       console.error("Failed to load tasks:", err);
@@ -36,8 +36,8 @@ export default function Tasks() {
 
     try {
 
-      const res = await axios.post(
-        "http://localhost:5000/api/tasks",
+      const res = await api.post(
+        "https://dualmind-ai-xubm.onrender.com/api/tasks",
         { title: task }
       );
 
@@ -58,7 +58,7 @@ export default function Tasks() {
 
     try {
 
-      const res = await axios.put(
+      const res = await api.put(
         `https://dualmind-ai-xubm.onrender.com/api/tasks/${id}`
       );
 
@@ -82,7 +82,7 @@ const deleteTask = async (id) => {
 
   try {
 
-    await axios.delete(`https://dualmind-ai-xubm.onrender.com/api/tasks/${id}`);
+    await api.delete(`https://dualmind-ai-xubm.onrender.com/api/tasks/${id}`);
 
     setTasks(tasks.filter((t) => t._id !== id));
 
