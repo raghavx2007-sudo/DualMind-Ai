@@ -46,13 +46,9 @@ router.get("/", auth, async (req, res) => {
 
 // DELETE REMINDER
 router.delete("/:id", auth, async (req, res) => {
-
   try {
 
-    await Reminder.findOneAndDelete({
-      _id: req.params.id,
-      user: req.user.id
-    });
+    await Reminder.findByIdAndDelete(req.params.id);
 
     res.json({ message: "Reminder deleted" });
 
@@ -62,7 +58,7 @@ router.delete("/:id", auth, async (req, res) => {
     res.status(500).json({ error: "Failed to delete reminder" });
 
   }
-
 });
+
 
 module.exports = router;
