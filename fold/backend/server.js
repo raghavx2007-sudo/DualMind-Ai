@@ -6,6 +6,12 @@ const connectDB = require("./config/db");
 const Conversation = require("./models/Conversation");
 const Dashboard = require("./models/Dashboard");
 const Task = require("./models/Task");
+const OpenAI = require("openai");
+
+const groq = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1"
+});
 
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const reminderRoutes = require("./routes/reminderRoutes");
@@ -160,23 +166,40 @@ app.put("/api/tasks/:id", async (req, res) => {
 
 app.post("/api/chat", async (req, res) => {
 
-  const { text } = req.body;
+  const { text, mode } = req.body;
 
   try {
 
-    const responses = [
+    let prompt = text;
 
-      "I understand what you're sharing. Taking a moment to slow down and breathe can help bring clarity.",
+    if (mode === "learning") {
 
-      "Thank you for expressing your thoughts. Small positive steps can make a meaningful difference.",
+      prompt = `
+You are an expert teacher AI.
 
-      "It sounds like you're reflecting on something important. Try focusing on one constructive action you can take next.",
+Explain the topic clearly for a student.
 
-      "Your message has been noted. Staying mindful and balanced can help maintain focus and productivity."
+Structure your answer like:
 
-    ];
+1. Simple Explanation
+2. Step-by-step breakdown
+3. Real-world example
+4. Key points summary
 
-    const aiReply = responses[Math.floor(Math.random() * responses.length)];
+Topic:
+${text}
+`;
+
+    }
+
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        { role: "user", content: prompt }
+      ]
+    });
+
+    const aiReply = completion.choices[0].message.content;
 
     const conversation = new Conversation({
       userMessage: text,
@@ -197,10 +220,10 @@ app.post("/api/chat", async (req, res) => {
 
   } catch (error) {
 
-    console.error("Chat Error:", error);
+    console.error("Groq Error:", error);
 
-    res.status(500).json({
-      reply: "Unable to process message."
+    res.json({
+      reply: "AI service temporarily unavailable."
     });
 
   }
@@ -217,16 +240,29 @@ app.post("/api/analyze", async (req, res) => {
 
   try {
 
-    const bri = Math.floor(Math.random() * 100);
-    const stress = Math.floor(Math.random() * 100);
+    const prompt = `
+Analyze the emotional state of the following message.
 
-    const analysis =
-      "The message indicates a moderate cognitive workload. Maintaining balance, organizing tasks, and taking short breaks may help sustain productivity.";
+Return:
+1. Stress level (0-100)
+2. Burnout risk
+3. Short explanation
+
+Message:
+${text}
+`;
+
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.1-8b-instant",
+      messages: [
+        { role: "user", content: prompt }
+      ]
+    });
+
+    const aiText = completion.choices[0].message.content;
 
     res.json({
-      bri,
-      stress,
-      analysis
+      analysis: aiText
     });
 
   } catch (error) {
@@ -234,9 +270,7 @@ app.post("/api/analyze", async (req, res) => {
     console.error("Analysis Error:", error);
 
     res.json({
-      bri: 50,
-      stress: 50,
-      analysis: "Analysis unavailable."
+      analysis: "Fallback analysis"
     });
 
   }
