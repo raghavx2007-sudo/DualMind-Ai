@@ -19,7 +19,7 @@ export default function Reminders() {
 
   const fetchReminders = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/reminders");
+      const res = await axios.get("https://dualmind-ai-xubm.onrender.com/api/reminders");
       setList(res.data);
     } catch (err) {
       console.error("Error loading reminders:", err);
@@ -34,7 +34,7 @@ export default function Reminders() {
     if (!reminder || !time || !date) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/api/reminders/add", {
+      const res = await axios.post("https://dualmind-ai-xubm.onrender.com/api/reminders/add", {
         text: reminder,
         time: time,
         date: date,
@@ -55,7 +55,7 @@ export default function Reminders() {
 
   const deleteReminder = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/reminders/${id}`);
+      await axios.delete(`https://dualmind-ai-xubm.onrender.com/api/reminders/${id}`);
       setList(list.filter((item) => item._id !== id));
     } catch (err) {
       console.error("Error deleting reminder:", err);
