@@ -82,9 +82,9 @@ const deleteTask = async (id) => {
 
   try {
 
-    await api.delete(`https://dualmind-ai-xubm.onrender.com/api/tasks/${id}`);
+    await api.delete(`/tasks/${id}`);
 
-    setTasks(tasks.filter((t) => t._id !== id));
+    setTasks((prev) => prev.filter((t) => t._id !== id));
 
   } catch (err) {
 
