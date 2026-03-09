@@ -16,6 +16,7 @@ const groq = new OpenAI({
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const reminderRoutes = require("./routes/reminderRoutes");
 const taskRoutes = require("./routes/tasks");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 const PORT = 5000;
@@ -37,6 +38,7 @@ connectDB();
    ROUTES
 ========================= */
 
+app.use("/api/auth", authRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api", taskRoutes);
 app.use("/api/reminders", reminderRoutes);
