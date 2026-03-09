@@ -18,13 +18,16 @@ export default function Reminders() {
   }, []);
 
   const fetchReminders = async () => {
-    try {
-      const res = await api.get("https://dualmind-ai-xubm.onrender.com/api/reminders");
-      setList(res.data);
-    } catch (err) {
-      console.error("Error loading reminders:", err);
-    }
-  };
+  try {
+    const res = await api.get("/api/reminders");
+
+    console.log("REMINDER RESPONSE:", res.data);
+
+    setList(res.data);
+  } catch (err) {
+    console.error("Error loading reminders:", err);
+  }
+};
 
   /* ================================
      ADD REMINDER
