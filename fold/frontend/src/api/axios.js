@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://dualmind-ai-xubm.onrender.com", // change if needed
+  baseURL: "https://dualmind-ai-xubm.onrender.com/api", // change if needed
 });
 
 // Attach token automatically
